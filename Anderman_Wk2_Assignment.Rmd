@@ -1,0 +1,32 @@
+---
+title: "Anderman_Wk2_Assignment"
+output: pdf_document
+---
+
+```{r connect-db, eval = FALSE}
+# library(RMySQL)
+# con <- dbConnect(MySQL(),
+#          dbname="movie_reviews")
+```
+
+```{r read-in-csv}
+reviews <- read.csv(file="movie_reviews.csv", header = TRUE, sep = ",", na.strings = "\\N")
+```
+
+```{r check-data-frame}
+is.data.frame(reviews)
+head(reviews)
+```
+
+```{r quick-analysis}
+myscores <- subset(reviews, critic == 'JA3', select = c(title, critic_score))
+barplot(myscores$critic_score, main = "My Reviews")
+
+barplot(c(Female = mean(reviews$critic_score[reviews$critic_gender == 'f'], na.rm = TRUE), Male = mean(reviews$critic_score[reviews$critic_gender == 'm'], na.rm = TRUE)), main = "Average Scores by Gender")
+
+meanscores <- aggregate(reviews$critic_score ~ reviews$critic, reviews, mean)
+colnames(meanscores) <- c("critic", "mean_score")
+
+barplot(meanscores$mean_score, main = "Average Scores by Critic")
+```
+
